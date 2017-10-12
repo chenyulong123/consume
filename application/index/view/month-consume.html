@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <title>{$title}</title>
+    <form class="form-inline">
+        <div class="form-group">
+            <label class="sr-only">月消费</label>
+            <input type="text" class="form-control" id="month" placeholder="201710">
+        </div>
+        <button type="submit" class="btn btn-default" id="search">搜索</button>
+    </form>
+    <br>
+    <p id="month_consume"></p>
+</head>
+<body>
+
+</body>
+<script src="/static/css/jquery.min.js"></script>
+<script>
+    $(function(){
+        $('#search').click(function(event){
+            event.preventDefault();
+            var month = $('#month').val();
+            alert(month);
+            $.ajax({
+                url: '/index/count_month_consume?month='+month,
+                type: 'get',
+                dataType: 'json',
+                success: function(data){
+                    console.log(data);
+                    if(data === false) {
+                        alert('请填写正确的数据');
+                    } else {
+                        $('#month_consume').text('该月消费：'+data+' ¥');
+                    }
+                }
+            })
+        })
+    })
+</script>
+</html>

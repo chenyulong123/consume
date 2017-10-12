@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+
+
+    <title>{$title}</title>
+</head>
+<body>
+
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target = "#exampleModal" data-whatever="@mdo">创建消费单</button>
+<a class="btn btn-primary" href="{:url('/index/today_consume')}" role="button" target="_blank">今日消费</a>
+<a class="btn btn-primary" href="{:url('/index/month_consume')}" role="button" target="_blank">月消费</a>
+
+    
+
+<table class="table table-striped">
+    <th class="success">ID</th>
+    <th class="success">商品</th>
+    <th class="success">价格</th>
+    <th class="success" id="table">购买时间</th>
+    <th class="success">操作</th>
+
+    <!--模态框-->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="exampleModalLabel">New message</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">商品名:</label>
+                            <input type="text" class="form-control" id="product">
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label">价格:</label>
+                            <input type="text" class="form-control" id="price">
+
+
+                        </div>
+                        <div class="form-group">
+                            <label  class="control-label">购买时间:</label>
+                            <input type="text" class="form-control" id="time" placeholder="2017-10-1">
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="sendData">Send data</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</table>
+</body>
+<script src="/static/css/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<script src="/static/css/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $.ajax({
+            url: 'index/product_info',
+            type: 'get',
+            dataType: 'json',
+            success: function(data){
+                $str = '<tr>';
+                $(data).each(function(n, i){
+                    $str += '<td>'+i.id+'</td><td>'+i.product+'</td><td>'+i.price+'¥</td><td>'+i.created_time+'</td><td><a class="btn btn-default" href='+"http://tp5.com/index/delete_ticket/"+i.id+' role="button">删除</a></td>';
+                    $str += '</tr>';
+
+                });
+                $('.table-striped').append($str);
+            }
+        })
+    })
+$(function(){
+
+
+        $('#exampleModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var recipient = button.data('whatever') // Extract info from data-* attributes
+
+            $('#sendData').click(function(){
+                var product = $('#product').val();
+                var price = $('#price').val();
+                var time = $('#time').val();
+                $.ajax({
+                    url:'index/created_ticket',
+                    type:'post',
+                    data:{"product":product, "price":price, "time":time},
+                    dataType:'json',
+                    success: function(data){
+                        if(data){
+                            alert('创建消费记录成功');
+                        } else {
+                            alert('创建消费记录失败');
+                        }
+                    }
+                })
+            })
+        })
+    })
+</script>
+</html>

@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{$title}</title>
+
+</head>
+<body>
+    <p></p>
+</body>
+<script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+    $.ajax({
+        url: '/index/count_today_consume',
+        type: 'get',
+        dataType: 'json',
+        success: function(data){
+            $('p').text('今日共消费：'+data+' ¥');
+        }
+    })
+})
+</script>
+</html>
